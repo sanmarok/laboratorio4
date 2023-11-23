@@ -48,7 +48,7 @@ class ModelUsers
     {
         try {
             $table = "usertypes";
-            $stmt = Connection::connect()->prepare("SELECT DISTINCT id, name FROM $table WHERE NOT ID= 1");
+            $stmt = Connection::connect()->prepare("SELECT DISTINCT id, name FROM $table");
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -71,6 +71,29 @@ class ModelUsers
             $stmt->bindParam(":user_type_id", $user_type_id, PDO::PARAM_INT);
             $stmt->bindParam(":password", $password, PDO::PARAM_STR);  // No necesitas hacer crypt aquí, asumiré que ya está cifrada
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                return "error";
+            }
+        } catch (PDOException $e) {
+            return "ERROR: " . $e->getMessage();
+        }
+    }
+
+    static public function mdlDeleteUser($delete_user_id)
+    {
+        try {
+            $table = 'users';
+
+            // Sentencia SQL preparada
+            $sql = "DELETE FROM $table WHERE id = :delete_user_id";
+            $stmt = Connection::connect()->prepare($sql);
+
+            // Asignar parámetro
+            $stmt->bindParam(":delete_user_id", $delete_user_id, PDO::PARAM_INT);
 
             // Ejecutar la consulta
             if ($stmt->execute()) {

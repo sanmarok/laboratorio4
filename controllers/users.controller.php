@@ -206,6 +206,62 @@ class ControllerUsers
     static public function ctrDeleteUser()
     {
         if (isset($_POST['delete_user_id'])) {
+            $verifyRole = ModelUsers::mdlShowUsers('users', 'id', $_POST['delete_user_id']);
+
+            // Verificar si se encontró un usuario con el ID especificado
+            if ($verifyRole && is_array($verifyRole)) {
+                if ($verifyRole['user_type_id'] != 1) {
+                    $response = ModelUsers::mdlDeleteUser($_POST['delete_user_id']);
+
+                    if ($response == "success") {
+                        echo '<script>
+                            Swal.fire({
+                                icon: "success",
+                                title: "¡Éxito!",
+                                text: "Usuario eliminado correctamente",
+                                confirmButtonText: "Aceptar"
+                            })
+                        </script>';
+                    } else if ($response == "error") {
+                        echo '<script>
+                            Swal.fire({
+                                icon: "error",
+                                title: "¡Error!",
+                                text: "Error al eliminar el usuario",
+                                confirmButtonText: "Aceptar"
+                            })
+                        </script>';
+                    }
+                } else {
+                    echo '<script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "¡Error!",
+                            text: "Este usuario no puede eliminarse",
+                            confirmButtonText: "Aceptar"
+                        });
+                    </script>';
+                }
+            } else {
+                // No se encontró un usuario con el ID especificado
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "No se encontró el usuario con el ID especificado",
+                        confirmButtonText: "Aceptar"
+                    });
+                </script>';
+            }
+        } else {
+            echo '<script>
+                Swal.fire({
+                    icon: "error",
+                    title: "¡Error!",
+                    text: "Usuario no identificado",
+                    confirmButtonText: "Aceptar"
+                });
+            </script>';
         }
     }
 }
