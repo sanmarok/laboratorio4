@@ -105,3 +105,38 @@ function confirmDeleteUser(button) {
     }
   });
 }
+
+function confirmChangeStatus(button, userId, newStatus) {
+  Swal.fire({
+    title: `¿Estás seguro de cambiar el estado a ${newStatus}?`,
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: `Sí, ${newStatus} usuario`,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Obtén el formulario y envíalo
+      var form = button.nextElementSibling;
+      var input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "change_status_user_id";
+      input.value = userId;
+      form.appendChild(input);
+
+      var statusInput = document.createElement("input");
+      statusInput.type = "hidden";
+      statusInput.name = "new_status";
+      statusInput.value = newStatus;
+      form.appendChild(statusInput);
+
+      form.submit();
+      Swal.fire(
+        `¡Usuario ${newStatus}!`,
+        `El usuario ha sido ${newStatus}.`,
+        "success"
+      );
+    }
+  });
+}

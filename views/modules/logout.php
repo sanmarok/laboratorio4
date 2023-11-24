@@ -4,8 +4,10 @@ if (isset($_SESSION['user_type_id'])) {
     echo '<script>
     window.location="authentication";
 </script>';
+    exit();
 } else {
     echo '<script>
     window.location="authentication";
 </script>';
+    exit();
 }

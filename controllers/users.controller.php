@@ -22,7 +22,7 @@ class ControllerUsers
                     $_SESSION['user_type_id'] = $response['user_type_id'];
                     $_SESSION['name'] = $response['name'];
                     $_SESSION['last_name'] = $response['last_name'];
-
+                    $_SESSION['id'] = $response['id'];
 
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
 

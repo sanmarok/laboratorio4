@@ -7,7 +7,6 @@ if ($_SESSION['user_type_id'] != 1 && $_SESSION['user_type_id'] != 2) {
     $roles = $ControllerUsers->ctrGetUserTypes();
     $ControllerUsers->ctrAddUser();
     $ControllerUsers->ctrDeleteUser();
-
 ?>
     <div class="card card-primary m-2">
         <div class="card-header">
@@ -15,15 +14,13 @@ if ($_SESSION['user_type_id'] != 1 && $_SESSION['user_type_id'] != 2) {
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-
             <?php
             if ($_SESSION['user_type_id'] == 1) {
-                echo '            <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#modalAddUser">
+                echo ' <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#modalAddUser">
                             <i class="nav-icon fas fa-plus"></i>
                         </button>';
             }
             ?>
-
             <table id="dataTableUsers" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -45,7 +42,12 @@ if ($_SESSION['user_type_id'] != 1 && $_SESSION['user_type_id'] != 2) {
                 <tbody>
                     <?php
                     foreach ($users as $user) {
-                        echo "<tr>";
+                        if ($user['id'] == $_SESSION['id']) {
+                            echo "<tr class='bg-teal'>";
+                        } else {
+                            echo "<tr>";
+                        }
+
                         echo "<td>{$user['id']}</td>";
                         echo "<td>{$user['name']}</td>";
                         echo "<td>{$user['last_name']}</td>";
@@ -54,24 +56,31 @@ if ($_SESSION['user_type_id'] != 1 && $_SESSION['user_type_id'] != 2) {
                         echo "<td>{$user['creation_date']}</td>";
                         echo "<td>{$user['last_login_date']}</td>";
                         echo "<td>{$user['typeuser']}</td>";
+
                         if ($_SESSION['user_type_id'] == 1) {
-                            echo "<td><div class='text-center'>
-                            <button class='btn btn-primary'><i class='fas fa-edit'></i></button>
-                            <button class='btn btn-info mr-1'><i class='fas fa-key'></i></button>";
-                            if ($user['id'] != 1) {
+                            echo "<td><div class='text-center'>";
+                            if ($_SESSION['id'] == $user['id']) {
+                                echo "<button class='btn btn-info mr-1'><i class='fas fa-key'></i></button>";
+                            }
+                            if ($user['user_type_id'] != 1) {
+                                echo "<button class='btn btn-info mr-1'><i class='fas fa-key'></i></button>";
+                                switch ($user['status']) {
+                                    case 'active':
+                                        echo "<button class='btn btn-outline-secondary mr-1' onclick='confirmChangeStatus(this, \"{$user['id']}\", \"inactive\")'><i class='fas fa-power-off'></i></button>";
+                                        break;
+                                    case 'inactive':
+                                        echo "<button class='btn btn-outline-success mr-1' onclick='confirmChangeStatus(this, \"{$user['id']}\", \"active\")'><i class='fas fa-power-off'></i></button>";
+                                        break;
+                                }
                                 echo '<button type="button" class="btn btn-danger" onclick="confirmDeleteUser(this)"><i class="fas fa-trash"></i></button>';
                                 echo '<form id="deleteForm" method="post" style="display: none;">
-                                <input type="hidden" name="delete_user_id" value="' . $user['id'] . '">
-                            </form></div></td>';
+                            <input type="hidden" name="delete_user_id" value="' . $user['id'] . '">
+                        </form></div>';
                             }
                         }
-
-
-                        echo "</tr>";
+                        echo "</td></tr>";
                     }
                     ?>
-
-
                 </tbody>
             </table>
         </div>
@@ -110,6 +119,7 @@ if ($_SESSION['user_type_id'] != 1 && $_SESSION['user_type_id'] != 2) {
                             <div class="form-group col-md-6">
                                 <label for="typeuser">Tipo de Usuario</label>
                                 <select class="form-control" id="typeuser" name="typeuser" required autocomplete="off">
+                                    <option value="" disabled selected>Selecciona un rol</option>
                                     <?php
                                     foreach ($roles as $role) {
                                         echo "<option value= " . $role['id'] . ">" . $role['name'] . "</option>";
@@ -150,7 +160,9 @@ if ($_SESSION['user_type_id'] != 1 && $_SESSION['user_type_id'] != 2) {
             </div>
         </div>
     </div>
-<?php
 
+
+
+<?php
 }
 ?>
