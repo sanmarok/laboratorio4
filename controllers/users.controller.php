@@ -80,7 +80,6 @@ class ControllerUsers
         return ModelUsers::mdlGetUserType();
     }
 
-
     static public function ctrAddUser()
     {
         if (isset($_POST['name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['typeuser']) && isset($_POST['password']) && isset($_POST['confirm_password'])) {
@@ -92,7 +91,7 @@ class ControllerUsers
                         title: "¡Error!",
                         text: "Todos los campos son necesarios",
                         confirmButtonText: "Aceptar"
-                    });
+                    }).then(() =>{window.location = "users";});
                 </script>';
                 return;
             }
@@ -105,7 +104,7 @@ class ControllerUsers
                         title: "¡Error!",
                         text: "Formato de correo electrónico inválido",
                         confirmButtonText: "Aceptar"
-                    });
+                    }).then(() =>{window.location = "users";});
                 </script>';
                 return;
             }
@@ -118,7 +117,7 @@ class ControllerUsers
                         title: "¡Error!",
                         text: "Las contraseñas no coinciden",
                         confirmButtonText: "Aceptar"
-                    });
+                    }).then(() =>{window.location = "users";});
                 </script>';
                 return;
             }
@@ -131,7 +130,7 @@ class ControllerUsers
                     title: "¡Error!",
                     text: "El nombre debe contener al menos 2 caracteres y solo letras",
                     confirmButtonText: "Aceptar"
-                });
+                }).then(() =>{window.location = "users";});
             </script>';
                 return;
             }
@@ -144,7 +143,7 @@ class ControllerUsers
                     title: "¡Error!",
                     text: "El apellido debe contener al menos 2 caracteres y solo letras",
                     confirmButtonText: "Aceptar"
-                });
+                }).then(() =>{window.location = "users";});
             </script>';
                 return;
             }
@@ -161,7 +160,7 @@ class ControllerUsers
                         title: "¡Error!",
                         text: "El correo electrónico ya está registrado",
                         confirmButtonText: "Aceptar"
-                    });
+                    }).then(() =>{window.location = "users";});
                 </script>';
                 return;
             }
@@ -172,12 +171,14 @@ class ControllerUsers
 
             if ($response == "success") {
                 echo '<script>
+
                 Swal.fire({
                     icon: "success",
                     title: "¡Éxito!",
                     text: "Usuario agregado correctamente",
                     confirmButtonText: "Aceptar"
-                })
+
+                }).then(() =>{window.location = "users";});
             </script>';
                 return;
             } else if ($response == "error") {
@@ -187,18 +188,11 @@ class ControllerUsers
                     title: "¡Error!",
                     text: "Error desconocido",
                     confirmButtonText: "Aceptar"
-                })
+                }).then(() =>{window.location = "users";});
             </script>';
                 return;
             }
         } else {
-            // echo '<script>
-            //     Swal.fire({
-            //         icon: "error",
-            //         title: "¡Error!",
-            //         text: "Faltan parámetros en la solicitud",
-            //     });
-            // </script>';
             return;
         }
     }
@@ -206,11 +200,11 @@ class ControllerUsers
     static public function ctrDeleteUser()
     {
         if (isset($_POST['delete_user_id'])) {
-            $verifyRole = ModelUsers::mdlShowUsers('users', 'id', $_POST['delete_user_id']);
+            $verifyUser = ModelUsers::mdlShowUsers('users', 'id', $_POST['delete_user_id']);
 
             // Verificar si se encontró un usuario con el ID especificado
-            if ($verifyRole && is_array($verifyRole)) {
-                if ($verifyRole['user_type_id'] != 1) {
+            if ($verifyUser && is_array($verifyUser)) {
+                if ($verifyUser['id'] != 1) {
                     $response = ModelUsers::mdlDeleteUser($_POST['delete_user_id']);
 
                     if ($response == "success") {
@@ -220,8 +214,9 @@ class ControllerUsers
                                 title: "¡Éxito!",
                                 text: "Usuario eliminado correctamente",
                                 confirmButtonText: "Aceptar"
-                            })
+                            }).then(() =>{window.location = "users";});
                         </script>';
+                        return;
                     } else if ($response == "error") {
                         echo '<script>
                             Swal.fire({
@@ -229,8 +224,9 @@ class ControllerUsers
                                 title: "¡Error!",
                                 text: "Error al eliminar el usuario",
                                 confirmButtonText: "Aceptar"
-                            })
+                            }).then(() =>{window.location = "users";});
                         </script>';
+                        return;
                     }
                 } else {
                     echo '<script>
@@ -239,8 +235,9 @@ class ControllerUsers
                             title: "¡Error!",
                             text: "Este usuario no puede eliminarse",
                             confirmButtonText: "Aceptar"
-                        });
+                        }).then(() =>{window.location = "users";});
                     </script>';
+                    return;
                 }
             } else {
                 // No se encontró un usuario con el ID especificado
@@ -250,18 +247,12 @@ class ControllerUsers
                         title: "¡Error!",
                         text: "No se encontró el usuario con el ID especificado",
                         confirmButtonText: "Aceptar"
-                    });
+                    }).then(() =>{window.location = "users";});
                 </script>';
+                return;
             }
         } else {
-            echo '<script>
-                Swal.fire({
-                    icon: "error",
-                    title: "¡Error!",
-                    text: "Usuario no identificado",
-                    confirmButtonText: "Aceptar"
-                });
-            </script>';
+            return;
         }
     }
 }

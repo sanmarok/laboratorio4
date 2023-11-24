@@ -41,7 +41,7 @@ if (isset($_SESSION['user_type_id'])) {
                         <a class="nav-link text-white" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                     </li>
                     <li class="nav-item d-none d-sm-inline-block">
-                        <a href="index.php" class="nav-link text-white">Inicio</a>
+                        <a href="home" class="nav-link text-white">Inicio</a>
                     </li>
                 </ul>
             </nav>
@@ -66,11 +66,13 @@ if (isset($_SESSION['user_type_id'])) {
                                 <?php
                                 switch ($_SESSION['user_type_id']) {
                                     case 1:
-                                        echo '<i class="nav-icon fas fa-user-tie mr-2"></i><span class="px-1">Adminstrador<span>';
+                                        echo '<i class="nav-icon fas fa-user-tie mr-2"></i><span class="px-1">Adminstrador supremo<span>';
                                         break;
                                     case 2:
-                                        echo '<i class="nav-icon fas fa-user mr-2"></i><span class= px-1>Cliente<span>';
+                                        echo '<i class="nav-icon fas fa-user mr-2"></i><span class= px-1>Administrador<span>';
                                         break;
+                                    case 3:
+                                        echo '<i class="fa-solid fa-user-astronaut"></i><span class= px-1>Consultor<span>';
                                     default:
                                         # code...
                                         break;
@@ -88,32 +90,59 @@ if (isset($_SESSION['user_type_id'])) {
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             <?php
-                            if ($_SESSION['user_type_id'] == 1) {
+                            if ($_SESSION['user_type_id'] == 1 || $_SESSION['user_type_id'] == 2) {
                                 echo '                          
-                                    <li class="nav-item">
-                                        <a href="clients" class="nav-link">
-                                            <i class="nav-icon fas fa-user"></i>
-                                            <p>Clientes</p>
-                                        </a>
-                                    </li>
-        
-   
                                     <li class="nav-item">
                                         <a href="users" class="nav-link">
                                             <i class="nav-icon fas fa-users"></i>
                                             <p>Usuarios</p>
                                         </a>
-                                    </li>';
+                                    </li>
+                                    <li class="nav-item">
+                                    <a href="userstypes" class="nav-link">
+                                        <i class="nav-icon fas fa-user-tag"></i>
+                                        <p>Tipos de usuarios</p>
+                                    </a>
+                                </li>
+                                    ';
                             }
                             ?>
 
-                            <!-- Enlace de Productos -->
+                            <li class="nav-item">
+                                <a href="clients" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>Clientes</p>
+                                </a>
+                            </li>
+
+                            <?php
+                            if ($_SESSION['user_type_id'] == 1 || $_SESSION['user_type_id'] == 2) {
+                                echo '                            <li class="nav-item">
+                                <a href="maritalstatuses" class="nav-link">
+                                    <i class="nav-icon fas fa-ring"></i>
+                                    <p>Estados civiles</p>
+                                </a>
+                            </li>';
+                            }
+                            ?>
                             <li class="nav-item">
                                 <a href="products" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-cart"></i>
                                     <p>Productos</p>
                                 </a>
                             </li>
+
+                            <?php
+                            if ($_SESSION['user_type_id'] == 1 || $_SESSION['user_type_id'] == 2) {
+                                echo '                            <li class="nav-item">
+                                <a href="category" class="nav-link">
+                                    <i class="nav-icon fas fa-tag"></i>
+                                    <p>Categorias</p>
+                                </a>
+                            </li>';
+                            }
+                            ?>
+
                         </ul>
                     </nav>
                     <!-- /.sidebar-menu -->
@@ -128,13 +157,16 @@ if (isset($_SESSION['user_type_id'])) {
                             <div class="col-12">
                                 <?php
                                 if (isset($_GET["page"])) {
-                                    if (
-                                        $_GET["page"] == "clients" ||
-                                        $_GET["page"] == "users"   ||
-                                        $_GET["page"] == "products" ||
-                                        $_GET["page"] == "logout"
-                                    ) {
-                                        include 'modules/' . $_GET["page"] . '.php';
+                                    switch ($_GET["page"]) {
+                                        case "clients":
+                                        case "users":
+                                        case "products":
+                                        case "logout":
+                                            include 'modules/' . $_GET["page"] . '.php';
+                                            break;
+                                        default:
+                                            include 'modules/home.php';
+                                            break;
                                     }
                                 } else {
                                     include 'modules/home.php';
@@ -176,12 +208,10 @@ if (isset($_SESSION['user_type_id'])) {
     </html>
 <?php
 } else {
-    if (isset($_GET['page'])) {
-        if ($_GET['page'] == 'authentication' || $_GET['page'] == 'recoverpassword') {
-            include 'modules/' . $_GET['page'] . '.php';
-        }
-    } else {
+    if (isset($_GET['page']) && ($_GET['page'] == 'authentication')) {
         include 'modules/authentication.php';
+    } else {
+        include 'modules/authentication.php'; // o cualquier otra página predeterminada para usuarios no autenticados
     }
 }
 ?>

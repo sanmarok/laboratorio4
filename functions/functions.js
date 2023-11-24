@@ -77,15 +77,14 @@ function denegatedUser() {
     title: "Acceso no permitido",
     text: "No tienes permisos para acceder a esta página.",
     showConfirmButton: false,
-    timer: 3000,
+    timer: 1000,
     customClass: {
       popup: "white-text",
       title: "white-text",
     },
+  }).then(() => {
+    window.location = "home";
   });
-  setTimeout(function () {
-    window.location.href = "index.php";
-  }, 3000);
 }
 
 function confirmDeleteUser(button) {
