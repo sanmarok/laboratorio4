@@ -8,12 +8,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="newUserType" method="post" onsubmit="return validateAddUserForm()" class="needs-validation" novalidate>
+                <form id="newUserType" method="post" onsubmit="return validateAddTypeForm()" class="needs-validation" novalidate>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col">
                             <label for="name">Nombre</label>
-                            <input type="text" class="form-control" id="name" name="name" required autocomplete="off" minlength="2">
-                            <div class="invalid-feedback">Por favor, ingrese al menos 2 caracteres para el nombre.</div>
+                            <input type="text" class="form-control" id="typename" name="typename" required autocomplete="off" minlength="2">
+                            <div class="invalid-feedback">Por favor, ingrese al menos 4 caracteres para el nombre.</div>
                         </div>
                     </div>
                     <div class="modal-footer">

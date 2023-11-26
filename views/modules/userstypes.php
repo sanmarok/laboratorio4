@@ -5,6 +5,8 @@ if ($_SESSION['user_type_id'] != 1 && $_SESSION['user_type_id'] != 2) {
     $ControllerUsers = new ControllerUsers();
     $roles = $ControllerUsers->ctrGetUserTypes();
     $ControllerUsers->ctrDeleteUserType();
+    $ControllerUsers->ctrAddUserType();
+    $ControllerUsers->ctrEditUserType();
 ?>
     <div class="card card-primary m-2">
         <div class="card-header">
@@ -40,7 +42,8 @@ if ($_SESSION['user_type_id'] != 1 && $_SESSION['user_type_id'] != 2) {
                         if ($_SESSION['user_type_id'] == 1) {
                             if ($rol['id'] != 1) {
                                 echo "<td><div class='text-center'>";
-                                echo '<button class="btn btn-info mr-1 "><i class="fa-solid fa-pen-to-square"></i></button>';
+                                include "usertypes.modalEditType.php";
+
                                 echo '<button type="button" class="btn btn-danger" onclick="confirmDeleteUserType(this)"><i class="fas fa-trash"></i></button>';
                                 // Formulario para borrar usuario
                                 echo '<form id="deleteUserType' . $rol['id'] . '" method="post" style="display: none;">

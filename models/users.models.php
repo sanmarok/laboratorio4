@@ -207,4 +207,38 @@ class ModelUsers
             return "error";
         }
     }
+
+    static public function mdlAddUserType($typename)
+    {
+        try {
+            $stmt = Connection::connect()->prepare("INSERT INTO usertypes (name) VALUES (:typename)");
+            $stmt->bindParam(":typename", $typename, PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                return "error";
+            }
+        } catch (PDOException $e) {
+            return "error";
+        }
+    }
+
+    static public function mdlEditUserType($userTypeId, $editTypeName)
+    {
+        try {
+            $stmt = Connection::connect()->prepare("UPDATE usertypes SET name = :name WHERE id = :id");
+
+            $stmt->bindParam(":id", $userTypeId, PDO::PARAM_INT);
+            $stmt->bindParam(":name", $editTypeName, PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                return "error";
+            }
+        } catch (PDOException $e) {
+            return "error";
+        }
+    }
 }

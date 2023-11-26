@@ -475,4 +475,84 @@ class ControllerUsers
             return;
         }
     }
+
+    static public function ctrAddUserType()
+    {
+        if (isset($_POST['typename'])) {
+            // Validar que no esté vacío
+            if (empty($_POST['typename'])) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "El nombre del tipo de usuario es obligatorio",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "userstypes"; });
+                </script>';
+                return;
+            }
+            $typename = $_POST['typename'];
+            $response = ModelUsers::mdlAddUserType($typename);
+            if ($response == "success") {
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡Éxito!",
+                        text: "Tipo de usuario agregado correctamente",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "userstypes"; });
+                </script>';
+                return;
+            } else if ($response == "error") {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "Error desconocido al agregar el tipo de usuario",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "userstypes"; });
+                </script>';
+                return;
+            }
+        } else {
+            return;
+        }
+    }
+
+    static public function ctrEditUserType()
+    {
+        if (isset($_POST['editUserTypeId']) && isset($_POST['editTypeName'])) {
+            $userTypeId = $_POST['editUserTypeId'];
+            $editTypeName = $_POST['editTypeName'];
+            $response = ModelUsers::mdlEditUserType($userTypeId, $editTypeName);
+
+            switch ($response) {
+                case "success":
+                    echo '<script>
+                        Swal.fire({
+                            icon: "success",
+                            title: "¡Éxito!",
+                            text: "Tipo de usuario editado correctamente",
+                            confirmButtonText: "Aceptar"
+                        }).then(() => { window.location = "userstypes"; });
+                    </script>';
+                    break;
+                case "error":
+                    echo '<script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "¡Error!",
+                            text: "Error al editar el tipo de usuario",
+                            confirmButtonText: "Aceptar"
+                        }).then(() => { window.location = "userstypes"; });
+                    </script>';
+                    break;
+                default:
+                    // Maneja otros posibles resultados aquí
+                    break;
+            }
+        } else {
+            return;
+        }
+    }
 }
