@@ -255,4 +255,224 @@ class ControllerUsers
             return;
         }
     }
+
+    static public function ctrChangeUserStatus()
+    {
+        if (isset($_POST['change_status_user_id']) && isset($_POST['new_status'])) {
+            $verifyUser = ModelUsers::mdlShowUsers('users', 'id', $_POST['change_status_user_id']);
+
+            // Verificar si se encontró un usuario con el ID especificado
+            if ($verifyUser && is_array($verifyUser)) {
+                if ($verifyUser['id'] != 1) {
+                    $response = ModelUsers::mdlChangeUserStatus($_POST['change_status_user_id'], $_POST['new_status']);
+
+                    if ($response == "success") {
+                        echo '<script>
+                        Swal.fire({
+                            icon: "success",
+                            title: "¡Éxito!",
+                            text: "Estado del usuario cambiado correctamente",
+                            confirmButtonText: "Aceptar"
+                        }).then(() =>{window.location = "users";});
+                    </script>';
+                        return;
+                    } else if ($response == "error") {
+                        echo '<script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "¡Error!",
+                            text: "Error al cambiar el estado del usuario",
+                            confirmButtonText: "Aceptar"
+                        }).then(() =>{window.location = "users";});
+                    </script>';
+                        return;
+                    }
+                } else {
+                    echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "El estado de este usuario no puede cambiarse",
+                        confirmButtonText: "Aceptar"
+                    }).then(() =>{window.location = "users";});
+                </script>';
+                    return;
+                }
+            } else {
+                // No se encontró un usuario con el ID especificado
+                echo '<script>
+                Swal.fire({
+                    icon: "error",
+                    title: "¡Error!",
+                    text: "No se encontró el usuario con el ID especificado",
+                    confirmButtonText: "Aceptar"
+                }).then(() =>{window.location = "users";});
+            </script>';
+                return;
+            }
+        } else {
+            return;
+        }
+    }
+
+    static public function ctrRestorePassword()
+    {
+        if (isset($_POST['userIdRestore']) && isset($_POST['newPasswordRestore']) && isset($_POST['confirmPasswordRestore'])) {
+            // Validar que no estén vacíos
+            if (empty($_POST['userIdRestore']) || empty($_POST['newPasswordRestore']) || empty($_POST['confirmPasswordRestore'])) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "Todos los campos son necesarios",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "users"; });
+                </script>';
+                return;
+            }
+
+            // Validar que las contraseñas coincidan
+            if ($_POST['newPasswordRestore'] !== $_POST['confirmPasswordRestore']) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "Las contraseñas no coinciden",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "users"; });
+                </script>';
+                return;
+            }
+
+            // Agrega aquí cualquier validación adicional que necesites
+
+            // Lógica para cambiar la contraseña
+            $userId = $_POST['userIdRestore'];
+            $newPassword = $_POST['newPasswordRestore'];
+            $response = ModelUsers::mdlChangePassword($userId, $newPassword);
+
+            if ($response == "success") {
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡Éxito!",
+                        text: "Contraseña restaurada correctamente",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "users"; });
+                </script>';
+                return;
+            } else if ($response == "error") {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "Error desconocido",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "users"; });
+                </script>';
+                return;
+            }
+        } else {
+            return;
+        }
+    }
+
+    public static function ctrDeleteUserType()
+    {
+        if (isset($_POST['delete_user_type_id'])) {
+            $userTypeId = $_POST['delete_user_type_id'];
+
+            // Realiza las validaciones necesarias antes de eliminar el tipo de usuario
+
+            $response = ModelUsers::mdlDeleteUserType($userTypeId);
+
+            switch ($response) {
+                case "success":
+                    echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡Éxito!",
+                        text: "Tipo de usuario eliminado correctamente",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "userstypes"; });
+                </script>';
+                    break;
+                case "error":
+                    echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "Error al eliminar el tipo de usuario",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "userstypes"; });
+                </script>';
+                    break;
+                case "error_associated_users":
+                    echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "No se puede eliminar el tipo de usuario. Hay usuarios asociados.",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "userstypes"; });
+                </script>';
+                    break;
+                default:
+                    // Maneja otros posibles resultados aquí
+                    break;
+            }
+        } else {
+            return;
+        }
+    }
+
+    static public function ctrEditUser()
+    {
+        if (isset($_POST['editUserId']) && isset($_POST['editName']) && isset($_POST['editLastName']) && isset($_POST['editEmail']) && isset($_POST['editTypeUser'])) {
+            $userId = $_POST['editUserId'];
+            $editName = $_POST['editName'];
+            $editLastName = $_POST['editLastName'];
+            $editEmail = $_POST['editEmail'];
+            $editTypeUser = $_POST['editTypeUser'];
+
+            if ($userId == 1 && $editTypeUser != 1) {
+                echo '<script>
+                Swal.fire({
+                    icon: "error",
+                    title: "¡Error!",
+                    text: "No se puede editar el tipo de este usuario",
+                    confirmButtonText: "Aceptar"
+                }).then(() => { window.location = "users"; });
+            </script>';
+                return;
+            }
+
+            // Realizar la actualización en el modelo (ModelUsers)
+            $response = ModelUsers::mdlEditUser($userId, $editName, $editLastName, $editEmail, $editTypeUser);
+
+            if ($response == "success") {
+                echo '<script>
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Éxito!",
+                    text: "Usuario editado correctamente",
+                    confirmButtonText: "Aceptar"
+                }).then(() => { window.location = "users"; });
+            </script>';
+                return;
+            } else if ($response == "error") {
+                echo '<script>
+                Swal.fire({
+                    icon: "error",
+                    title: "¡Error!",
+                    text: "Error al editar el usuario",
+                    confirmButtonText: "Aceptar"
+                }).then(() => { window.location = "users"; });
+            </script>';
+                return;
+            }
+        } else {
+            return;
+        }
+    }
 }

@@ -105,4 +105,106 @@ class ModelUsers
             return "ERROR: " . $e->getMessage();
         }
     }
+
+    static public function mdlChangeUserStatus($change_status_user_id, $new_status)
+    {
+        try {
+            $table = 'users';
+
+            // Sentencia SQL preparada
+            $sql = "UPDATE $table SET status = :new_status WHERE id = :change_status_user_id";
+            $stmt = Connection::connect()->prepare($sql);
+
+            // Asignar parámetros
+            $stmt->bindParam(":new_status", $new_status, PDO::PARAM_STR);
+            $stmt->bindParam(":change_status_user_id", $change_status_user_id, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                return "error";
+            }
+        } catch (PDOException $e) {
+            return "ERROR: " . $e->getMessage();
+        }
+    }
+
+    static public function mdlChangePassword($userId, $newPassword)
+    {
+        try {
+            $table = 'users';
+
+            // Cifrar la nueva contraseña con la clave 'mugen'
+            $hashedPassword = crypt($newPassword, 'mugen');
+
+            // Sentencia SQL preparada
+            $sql = "UPDATE $table SET password = :password WHERE id = :id";
+            $stmt = Connection::connect()->prepare($sql);
+
+            // Asignar parámetros
+            $stmt->bindParam(":password", $hashedPassword, PDO::PARAM_STR);
+            $stmt->bindParam(":id", $userId, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                return "error";
+            }
+        } catch (PDOException $e) {
+            return "ERROR: " . $e->getMessage();
+        }
+    }
+
+    static public function mdlDeleteUserType($delete_user_type_id)
+    {
+        try {
+            $table = 'usertypes';
+
+            // Verificar si hay usuarios asociados a este tipo
+            $usersWithUserType = self::mdlShowUsers("users", 'user_type_id', $delete_user_type_id);
+
+            if (!empty($usersWithUserType)) {
+                // Hay usuarios asociados, no se puede eliminar el tipo
+                return "error_associated_users";
+            }
+
+            // Sentencia SQL preparada
+            $sql = "DELETE FROM $table WHERE id = :delete_user_type_id";
+            $stmt = Connection::connect()->prepare($sql);
+
+            // Asignar parámetro
+            $stmt->bindParam(":delete_user_type_id", $delete_user_type_id, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                return "error";
+            }
+        } catch (PDOException $e) {
+            return "ERROR: " . $e->getMessage();
+        }
+    }
+    static public function mdlEditUser($userId, $editName, $editLastName, $editEmail, $editTypeUser)
+    {
+        try {
+            $stmt = Connection::connect()->prepare("UPDATE users SET name = :name, last_name = :last_name, email = :email, user_type_id = :user_type_id WHERE id = :id");
+
+            $stmt->bindParam(":id", $userId, PDO::PARAM_INT);
+            $stmt->bindParam(":name", $editName, PDO::PARAM_STR);
+            $stmt->bindParam(":last_name", $editLastName, PDO::PARAM_STR);
+            $stmt->bindParam(":email", $editEmail, PDO::PARAM_STR);
+            $stmt->bindParam(":user_type_id", $editTypeUser, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                return "error";
+            }
+        } catch (PDOException $e) {
+            return "error";
+        }
+    }
 }

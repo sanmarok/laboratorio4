@@ -162,6 +162,7 @@ if (isset($_SESSION['user_type_id'])) {
                                         case "users":
                                         case "products":
                                         case "logout":
+                                        case "userstypes":
                                             include 'modules/' . $_GET["page"] . '.php';
                                             break;
                                         default:
