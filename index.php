@@ -14,6 +14,8 @@ require_once 'models/connection.php';
 require_once 'controllers/users.controller.php';
 require_once 'models/users.models.php';
 
+require_once 'controllers/clients.controller.php';
+require_once 'models/clients.models.php';
 
 $template = new ControllerTemplate();
 $template->ctrShowTemplate();

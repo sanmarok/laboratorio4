@@ -26,8 +26,12 @@ if (isset($_SESSION['user_type_id'])) {
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!--Font Awesome -->
         <script src="https://kit.fontawesome.com/dcd8a6e406.js" crossorigin="anonymous"></script>
-        <!-- Enlace al archivo functions.js -->
-        <script src="functions/functions.js"></script>
+        <!-- Enlace al archivo users.functions.js -->
+        <script src="functions/users.functions.js"></script>
+        <!-- Enlace al archivo clients.functions.js -->
+        <script src="functions/clients.functions.js"></script>
+        <!-- Enlace al archivo template.functions.js -->
+        <script src="functions/template.functions.js"></script>
     </head>
 
     <body class="layout-navbar-fixed control-sidebar-slide-open dark-mode">

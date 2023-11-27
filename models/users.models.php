@@ -9,7 +9,18 @@ class ModelUsers
                 $stmt = Connection::connect()->prepare("SELECT * FROM $table WHERE $item = :$item");
                 $stmt->bindParam(":" . $item, $value, PDO::PARAM_STR);
                 $stmt->execute();
-                return $stmt->fetch(PDO::FETCH_ASSOC);
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                // Aplicar formato de fechas
+                if ($result !== false && isset($result['creation_date'])) {
+                    $result['creation_date'] = date('d/m/Y', strtotime($result['creation_date']));
+                }
+
+                if ($result !== false && isset($result['last_login_date'])) {
+                    $result['last_login_date'] = date('d/m/Y', strtotime($result['last_login_date']));
+                }
+
+                return $result;
             } catch (Exception $e) {
                 return "ERROR: " . $e->getMessage();
             }
@@ -18,12 +29,27 @@ class ModelUsers
                 $stmt = Connection::connect()->prepare("SELECT u.*, t.name AS typeuser FROM $table AS u INNER JOIN usertypes AS t ON u.user_type_id = t.id");
 
                 $stmt->execute();
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Aplicar formato de fechas
+                foreach ($results as &$result) {
+                    if (isset($result['creation_date'])) {
+                        $result['creation_date'] = date('d/m/Y', strtotime($result['creation_date']));
+                    }
+
+                    if (isset($result['last_login_date'])) {
+                        $result['last_login_date'] = date('d/m/Y', strtotime($result['last_login_date']));
+                    }
+                }
+
+                return $results;
             } catch (Exception $e) {
                 return "ERROR: " . $e->getMessage();
             }
         }
     }
+
+
 
     static public function mdlUpdateLogin($table, $item1, $value1, $item2, $value2)
     {

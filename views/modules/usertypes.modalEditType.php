@@ -1,5 +1,5 @@
 <?php
-echo '<button class="btn btn-info mr-1" data-toggle="modal" data-target="#modalEditType' . $rol['id'] . '"><i class="fa-solid fa-pen-to-square"></i></button>';
+echo '<button class="btn btn-warning mr-1" data-toggle="modal" data-target="#modalEditType' . $rol['id'] . '"><i class="fa-solid fa-pen-to-square"></i></button>';
 
 echo '<div class="modal fade text-left" id="modalEditType' . $rol['id'] . '" tabindex="-1" role="dialog" aria-labelledby="modalEditType" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
