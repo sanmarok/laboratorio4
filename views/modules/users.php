@@ -70,10 +70,10 @@ if ($_SESSION['user_type_id'] != 1 && $_SESSION['user_type_id'] != 2) {
                                 include 'views/modules/users.modalRestorePassword.php';
                                 include 'views/modules/users.modalEditUser.php';
                                 switch ($user['status']) {
-                                    case 'active':
+                                    case 'inactive':
                                         echo "<button class='btn btn-secondary mx-1' onclick='confirmChangeStatus(this, \"{$user['id']}\", \"active\")'><i class='fas fa-power-off'></i></button>";
                                         break;
-                                    case 'inactive':
+                                    case 'active':
                                         echo "<button class='btn btn-success mx-1' onclick='confirmChangeStatus(this, \"{$user['id']}\", \"inactive\")'><i class='fas fa-power-off'></i></button>";
                                         break;
                                 }

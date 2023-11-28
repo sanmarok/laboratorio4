@@ -49,8 +49,6 @@ class ModelUsers
         }
     }
 
-
-
     static public function mdlUpdateLogin($table, $item1, $value1, $item2, $value2)
     {
         try {
@@ -72,15 +70,18 @@ class ModelUsers
 
     static public function mdlGetUserType()
     {
-        try {
-            $table = "usertypes";
-            $stmt = Connection::connect()->prepare("SELECT DISTINCT id, name FROM $table");
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return "Error: " . $e->getMessage();
+        {
+            try {
+                $table = "usertypes";
+                $stmt = Connection::connect()->prepare("SELECT DISTINCT id, name FROM $table");
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                return "Error: " . $e->getMessage();
+            }
         }
     }
+    
     static public function mdlAddUser($name, $last_name, $email, $user_type_id, $password, $status = 'active')
     {
         try {

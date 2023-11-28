@@ -1,4 +1,3 @@
-
 // Validation function with Bootstrap classes
 function validateAddUserForm() {
   var form = document.getElementById("newUserForm");
@@ -97,7 +96,6 @@ function confirmChangeStatus(button, userId, newStatus) {
 
   Swal.fire({
     title: confirmText,
-    text: "¡No podrás revertir esto!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#d33",
@@ -228,8 +226,6 @@ function validateEditUserForm(userId) {
   return form.checkValidity();
 }
 
-
-
 function validateAddTypeForm() {
   var form = document.getElementById("newUserType");
   var typename = document.getElementById("typename");
@@ -257,27 +253,18 @@ function validateAddTypeForm() {
 }
 
 function validateEditTypeForm(typeId) {
-  var form = document.getElementById("editUserType_" + typeId);
-  var typename = document.getElementById("typename" + typeId);
-
-  // Remove the Bootstrap was-validated class to reset the validation state
-  form.classList.remove("was-validated");
+  var form = document.getElementById("editUserForm_" + typeId);
+  var typeName = document.getElementById("editTypeName_" + typeId);
 
   // Limpiar mensajes de error anteriores
-  typename.classList.remove("is-invalid");
-
-  // Agregar la clase Bootstrap de validación para activar el estilo y la retroalimentación
-  form.classList.add("was-validated");
+  typeName.classList.remove("is-invalid");
 
   // Realizar validación personalizada
-  if (typename.value.length < 4) {
+  if (typeName.value.length < 4) {
     // Si el nombre tiene menos de 4 caracteres, mostrar un mensaje de error y marcar el campo como inválido
-    typename.classList.add("is-invalid");
+    typeName.classList.add("is-invalid");
     return false; // Evitar que se envíe el formulario
   }
 
-  // Puedes agregar más validaciones personalizadas según sea necesario
-
-  // Si todos los campos son válidos, permitir enviar el formulario
   return form.checkValidity();
 }

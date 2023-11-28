@@ -148,4 +148,70 @@ class ModelClients
             return "ERROR: " . $e->getMessage();
         }
     }
+
+    static public function mdlDeleteMaritalStatus($delete_user_type_id)
+    {
+        try {
+            $table = 'maritalstatus';
+
+            // Sentencia SQL preparada
+            $sql = "DELETE FROM $table WHERE id = :delete_user_type_id";
+            $stmt = Connection::connect()->prepare($sql);
+
+            // Asignar parámetro
+            $stmt->bindParam(":delete_user_type_id", $delete_user_type_id, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                $errorCode = $stmt->errorInfo()[1];
+
+                // Si es un error de clave foránea (FK violation), devuelve un código especial
+                if ($errorCode == 1451) {
+                    return "has_users";
+                } else {
+                    return "error";
+                }
+            }
+        } catch (PDOException $e) {
+            return "ERROR: " . $e->getMessage();
+        }
+    }
+
+
+
+    static public function mdlAddMaritalStatus($typename)
+    {
+        try {
+            $stmt = Connection::connect()->prepare("INSERT INTO maritalstatus (name) VALUES (:typename)");
+            $stmt->bindParam(":typename", $typename, PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                return "error";
+            }
+        } catch (PDOException $e) {
+            return "error";
+        }
+    }
+
+    static public function mdlEditMaritalStatus($userTypeId, $editTypeName)
+    {
+        try {
+            $stmt = Connection::connect()->prepare("UPDATE maritalstatus SET name = :name WHERE id = :id");
+
+            $stmt->bindParam(":id", $userTypeId, PDO::PARAM_INT);
+            $stmt->bindParam(":name", $editTypeName, PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                return "success";
+            } else {
+                return "error";
+            }
+        } catch (PDOException $e) {
+            return "error";
+        }
+    }
 }

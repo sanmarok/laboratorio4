@@ -322,4 +322,132 @@ class ControllerClients
             return;
         }
     }
+
+    public static function ctrDeleteMaritalStatus()
+    {
+        if (isset($_POST['delete_user_type_id'])) {
+            $userTypeId = $_POST['delete_user_type_id'];
+
+            $response = ModelClients::mdlDeleteMaritalStatus($userTypeId);
+
+            switch ($response) {
+                case "success":
+                    echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡Éxito!",
+                        text: "Tipo de usuario eliminado correctamente",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "maritalstatus"; });
+                </script>';
+                    break;
+                case "error":
+                    echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "Error al eliminar el tipo de usuario",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "maritalstatus"; });
+                </script>';
+                    break;
+                case "has_users":
+                    echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "No se puede eliminar el tipo de usuario. Hay usuarios asociados.",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "maritalstatus"; });
+                </script>';
+                    break;
+                default:
+                    // Maneja otros posibles resultados aquí
+                    break;
+            }
+        } else {
+            return;
+        }
+    }
+
+
+    static public function ctrAddMaritalStatus()
+    {
+        if (isset($_POST['typename'])) {
+            // Validar que no esté vacío
+            if (empty($_POST['typename'])) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "El nombre del tipo de usuario es obligatorio",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "maritalstatus"; });
+                </script>';
+                return;
+            }
+            $typename = $_POST['typename'];
+            $response = ModelClients::mdlAddMaritalStatus($typename);
+            if ($response == "success") {
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡Éxito!",
+                        text: "Tipo de usuario agregado correctamente",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "maritalstatus"; });
+                </script>';
+                return;
+            } else if ($response == "error") {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡Error!",
+                        text: "Error desconocido al agregar el tipo de usuario",
+                        confirmButtonText: "Aceptar"
+                    }).then(() => { window.location = "maritalstatus"; });
+                </script>';
+                return;
+            }
+        } else {
+            return;
+        }
+    }
+
+    static public function ctrEditMaritalStatus()
+    {
+        if (isset($_POST['editUserTypeId']) && isset($_POST['editTypeName'])) {
+            $userTypeId = $_POST['editUserTypeId'];
+            $editTypeName = $_POST['editTypeName'];
+            $response = ModelClients::mdlEditMaritalStatus($userTypeId, $editTypeName);
+
+            switch ($response) {
+                case "success":
+                    echo '<script>
+                        Swal.fire({
+                            icon: "success",
+                            title: "¡Éxito!",
+                            text: "Tipo de usuario editado correctamente",
+                            confirmButtonText: "Aceptar"
+                        }).then(() => { window.location = "maritalstatus"; });
+                    </script>';
+                    break;
+                case "error":
+                    echo '<script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "¡Error!",
+                            text: "Error al editar el tipo de usuario",
+                            confirmButtonText: "Aceptar"
+                        }).then(() => { window.location = "maritalstatus"; });
+                    </script>';
+                    break;
+                default:
+                    // Maneja otros posibles resultados aquí
+                    break;
+            }
+        } else {
+            return;
+        }
+    }
 }

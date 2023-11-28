@@ -32,6 +32,8 @@ if (isset($_SESSION['user_type_id'])) {
         <script src="functions/clients.functions.js"></script>
         <!-- Enlace al archivo template.functions.js -->
         <script src="functions/template.functions.js"></script>
+        <!-- Enlace al archivo products.functions.js -->
+        <script src="functions/products.functions.js"></script>
     </head>
 
     <body class="layout-navbar-fixed control-sidebar-slide-open dark-mode">
@@ -122,7 +124,7 @@ if (isset($_SESSION['user_type_id'])) {
                             <?php
                             if ($_SESSION['user_type_id'] == 1 || $_SESSION['user_type_id'] == 2) {
                                 echo '                            <li class="nav-item">
-                                <a href="maritalstatuses" class="nav-link">
+                                <a href="maritalstatus" class="nav-link">
                                     <i class="nav-icon fas fa-ring"></i>
                                     <p>Estados civiles</p>
                                 </a>
@@ -167,6 +169,8 @@ if (isset($_SESSION['user_type_id'])) {
                                         case "products":
                                         case "logout":
                                         case "userstypes":
+                                        case "maritalstatus":
+                                        case "category":
                                             include 'modules/' . $_GET["page"] . '.php';
                                             break;
                                         default:

@@ -68,14 +68,6 @@
                         <!-- /.col -->
                     </div>
                 </form>
-
-
-                <!-- /.social-auth-links -->
-
-                <p class="mt-4 text-secondary">
-                    <a href="recoverpassword" class="text-decoration-none">Olvidé mi contraseña</a>
-                </p>
-
             </div>
             <!-- /.login-card-body -->
         </div>
