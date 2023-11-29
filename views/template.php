@@ -2,6 +2,41 @@
 session_start();
 if (isset($_SESSION['user_type_id'])) {
     $url = ControllerTemplate::url();
+    $pageTitle = "Inicio"; // Página predeterminada
+
+    if (isset($_GET["page"])) {
+        switch ($_GET["page"]) {
+            case "clients":
+                $pageTitle = "Clientes";
+                break;
+            case "users":
+                $pageTitle = "Usuarios";
+                break;
+            case "products":
+                $pageTitle = "Productos";
+                break;
+            case "logout":
+                $pageTitle = "Cerrar Sesión";
+                break;
+            case "userstypes":
+                $pageTitle = "Tipos de Usuarios";
+                break;
+            case "maritalstatus":
+                $pageTitle = "Estados Civiles";
+                break;
+            case "category":
+                $pageTitle = "Categorías";
+                break;
+            case "home":
+                $pageTitle = "Inicio";
+                break;
+                // Agrega más casos según sea necesario
+            default:
+                $pageTitle = "Página no encontrada";
+                break;
+        }
+    }
+
 ?>
     <!DOCTYPE html>
     <html lang="es">
@@ -9,7 +44,7 @@ if (isset($_SESSION['user_type_id'])) {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Inicio</title>
+        <title><?php echo $pageTitle; ?></title>
         <!-- DataTables -->
         <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
